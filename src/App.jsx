@@ -1,9 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import "./style.css";
+// https://sujeitoprogramador.com/rn-api/?api=posts
 
 const App = () => {
-  return (
-    <div><h1>teste</h1></div>
-  )
-}
+  const [nutri, setNutri] = useState([]);
 
-export default App
+  useEffect(() => {
+    function loadApi() {
+      let url = "https://sujeitoprogramador.com/rn-api/?api=posts";
+
+      fetch(url)
+        .then((r) => r.json())
+        .then((json) => {
+          console.log(json);
+          setNutri(json);
+        });
+    }
+    loadApi();
+  }, []);
+
+  return (
+    <div className="container">
+      <header>
+        <strong>React Nutri</strong>
+      </header>
+
+      {nutri.map((item) => {
+        return (
+          <article key={item.id} className="post">
+            <strong className="titulo">{item.titulo}</strong>
+            <img
+              src={item.capa}
+              alt="Mesa com alimentos variados, leite, legumes, queijos, etc"
+            />
+            <p className="subtitulo">{item.subtitulo}</p>
+            <a className="contentButton" href="">
+              Acessar conteúdo completo
+            </a>
+          </article>
+        );
+      })}
+    </div>
+  );
+};
+
+export default App;
